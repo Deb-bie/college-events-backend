@@ -39,9 +39,95 @@ def create_event():
         db.session.rollback()
         return jsonify(
             {
-                "Error": str(e)
+                "error": str(e)
             }
         ), 400
+
+
+@event_blueprint.route("/events/<int:event_id>", methods=["GET"])
+def get_event(event_id):
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify(
+            {
+                "error": "Event not found"
+            }
+        ), 404
+    return jsonify(event.to_json())
+
+
+
+@event_blueprint.route("/events", methods=["GET"])
+def get_events():
+    data = []
+    for event in Event.query.all():
+        data.append(event.to_json)
     
+    return jsonify(data)
+
+
+
+@event_blueprint.route("/events/<int:event_id>", methods=["PUT"])
+def update_user(event_id):
+    data = request.get_json()
+    event = Event.query.get(event_id)
+
+    if not event:
+        return jsonify(
+            {
+                "error": "Event not found"
+            }
+        ), 404
+    try:
+        event.name = data.get("name", event.name)
+        event.description = data.get("description", event.description)
+        event.location = data.get("location", event.location)
+        event.is_virtual = data.get("is_virtual", event.is_virtual)
+        event.date = data.get("date", event.date)
+        event.time = data.get("time", event.time)
+
+        db.session.commit()
+
+        return jsonify(
+            {
+                "message": "Event updated",
+                "event": event.to_json()
+            }
+        )
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(
+            {
+                "error": str(e)
+            }
+        ), 400
+
+
+@event_blueprint.route("/events/<event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    event = Event.query.get(event_id)
+
+    if not event:
+        return jsonify(
+            {
+                "error": "Event not found"
+            }
+        ), 404
+    
+    try:
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify(
+            {
+                "message": "Event deleted successfully"
+            }
+        )
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(
+            {
+                "error": str(e)    
+            }
+        ), 400
 
 
