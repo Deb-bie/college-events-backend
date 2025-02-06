@@ -17,7 +17,7 @@ def create_app():
     register_routes(app)
 
     with app.app_context():
-        # create database tables if they don;t exist
+        # create database tables if they don't exist
         db.create_all()
 
     return app
