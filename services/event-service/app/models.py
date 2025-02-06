@@ -65,5 +65,5 @@ class Event(db.Model):
             'location': self.location,
             'is_virtual': self.is_virtual,
             'date': self.date,
-            'time': self.time
+            'time': str(self.time)
         }
