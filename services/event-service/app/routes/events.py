@@ -61,7 +61,7 @@ def get_event(event_id):
 def get_events():
     data = []
     for event in Event.query.all():
-        data.append(event.to_json)
+        data.append(event.to_json())
     
     return jsonify(data)
 
