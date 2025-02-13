@@ -56,7 +56,7 @@ def get_user(user_id):
 def get_users():
     data = []
     for user in User.query.all():
-        data.append(user.to_json)
+        data.append(user.to_json())
     
     return jsonify(data)
 
