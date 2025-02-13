@@ -19,13 +19,13 @@ class User(db.Model):
     )
 
     email = db.Column(
-        db.String,
+        db.String(120),
         unique=True,
         nullable=False
     )
 
     password = db.Column(
-        db.String,
+        db.String(80),
         unique=False,
         nullable=False
     )
